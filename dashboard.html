@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenioCareX | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/api-integration.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            color: #3498db;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #2ecc71, #3498db);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .welcome-card h1 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.health { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .stat-icon.appointments { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .stat-icon.medications { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .stat-icon.reports { background: linear-gradient(45deg, #f39c12, #e67e22); }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            color: #2d3748;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .action-btn i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+
+        .profile-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-card h3 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-card h3 i {
+            margin-right: 0.5rem;
+            color: #3498db;
+        }
+
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-label {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .profile-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #2ecc71, #3498db);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .profile-section {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-heart"></i>
+            SenioCareX
+        </div>
+        <div class="user-menu">
+            <div class="user-avatar" id="userAvatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <button class="btn btn-secondary" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="loadingSection" class="loading">
+            <div class="spinner"></div>
+            <p>Loading your dashboard...</p>
+        </div>
+
+        <div id="dashboardContent" style="display: none;">
+            <div class="welcome-card">
+                <h1>Welcome back, <span id="userName">User</span>!</h1>
+                <p>Here's your health overview for today</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon health">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Health Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon appointments">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Upcoming Appointments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon medications">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="stat-number" id="medicationCount">0</div>
+                    <div class="stat-label">Active Medications</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon reports">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Health Reports</div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <a href="assessments.html" class="action-btn">
+                        <i class="fas fa-clipboard-check"></i>
+                        Take Health Assessment
+                    </a>
+                    <a href="consultation.html" class="action-btn">
+                        <i class="fas fa-user-md"></i>
+                        Book Consultation
+                    </a>
+                    <a href="products.html" class="action-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        Browse Products
+                    </a>
+                    <a href="community.html" class="action-btn">
+                        <i class="fas fa-users"></i>
+                        Join Community
+                    </a>
+                    <button class="action-btn" onclick="updateProfile()">
+                        <i class="fas fa-user-edit"></i>
+                        Update Profile
+                    </button>
+                    <button class="action-btn" onclick="viewHealthProfile()">
+                        <i class="fas fa-notes-medical"></i>
+                        Health Profile
+                    </button>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-card">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    <div id="personalInfo">
+                        <div class="profile-item">
+                            <span class="profile-label">Username:</span>
+                            <span class="profile-value" id="profileUsername">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Email:</span>
+                            <span class="profile-value" id="profileEmail">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Member Since:</span>
+                            <span class="profile-value" id="memberSince">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Account Status:</span>
+                            <span class="profile-value" id="accountStatus">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3><i class="fas fa-notes-medical"></i> Health Summary</h3>
+                    <div id="healthSummary">
+                        <div class="profile-item">
+                            <span class="profile-label">Blood Type:</span>
+                            <span class="profile-value" id="bloodType">Not specified</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Height:</span>
+                            <span class="profile-value" id="height">Not specified</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Weight:</span>
+                            <span class="profile-value" id="weight">Not specified</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Medications:</span>
+                            <span class="profile-value" id="medicationsCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize API and check authentication
+        const api = new SenioCareXAPI();
+        let currentUser = null;
+
+        // Check if user is authenticated
+        async function checkAuth() {
+            try {
+                if (!api.isAuthenticated()) {
+                    // Check localStorage for fallback mode
+                    const localUser = JSON.parse(localStorage.getItem('seniocarex_current_user') || 'null');
+                    if (!localUser) {
+                        window.location.href = 'login_signup.html';
+                        return;
+                    }
+                    currentUser = localUser;
+                    loadDashboard();
+                } else {
+                    // Try to get user from backend
+                    try {
+                        const response = await api.getCurrentUser();
+                        currentUser = response.data.user;
+                        loadDashboard();
+                    } catch (error) {
+                        console.error('Failed to get user from backend:', error);
+                        // Fallback to localStorage
+                        const localUser = JSON.parse(localStorage.getItem('seniocarex_current_user') || 'null');
+                        if (localUser) {
+                            currentUser = localUser;
+                            loadDashboard();
+                        } else {
+                            window.location.href = 'login_signup.html';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'login_signup.html';
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                // Hide loading and show content
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+
+                // Update user info
+                updateUserInfo();
+
+                // Load additional data if backend is available
+                if (api.isAuthenticated()) {
+                    await loadUserProfile();
+                    await loadHealthProfile();
+                }
+            } catch (error) {
+                console.error('Failed to load dashboard:', error);
+                Swal.fire('Error', 'Failed to load dashboard data', 'error');
+            }
+        }
+
+        // Update basic user info
+        function updateUserInfo() {
+            const userName = currentUser.profile?.firstName || currentUser.username || 'User';
+            const userInitial = userName.charAt(0).toUpperCase();
+
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userAvatar').textContent = userInitial;
+            document.getElementById('profileUsername').textContent = currentUser.username || '-';
+            document.getElementById('profileEmail').textContent = currentUser.email || '-';
+            
+            if (currentUser.createdAt) {
+                const memberSince = new Date(currentUser.createdAt).toLocaleDateString();
+                document.getElementById('memberSince').textContent = memberSince;
+            }
+
+            const status = currentUser.isVerified ? 'Verified' : 'Pending Verification';
+            document.getElementById('accountStatus').textContent = status;
+            document.getElementById('accountStatus').style.color = currentUser.isVerified ? '#2ecc71' : '#e74c3c';
+        }
+
+        // Load user profile from backend
+        async function loadUserProfile() {
+            try {
+                const response = await api.getUserProfile();
+                const user = response.data.user;
+                
+                // Update profile info
+                if (user.profile) {
+                    const fullName = `${user.profile.firstName || ''} ${user.profile.lastName || ''}`.trim();
+                    if (fullName) {
+                        document.getElementById('userName').textContent = fullName;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load user profile:', error);
+            }
+        }
+
+        // Load health profile from backend
+        async function loadHealthProfile() {
+            try {
+                const response = await api.getHealthProfile();
+                const healthProfile = response.data.healthProfile;
+                
+                if (healthProfile) {
+                    document.getElementById('bloodType').textContent = healthProfile.bloodType || 'Not specified';
+                    document.getElementById('height').textContent = healthProfile.height ? `${healthProfile.height} cm` : 'Not specified';
+                    document.getElementById('weight').textContent = healthProfile.weight ? `${healthProfile.weight} kg` : 'Not specified';
+                    
+                    const medicationCount = healthProfile.medications?.length || 0;
+                    document.getElementById('medicationCount').textContent = medicationCount;
+                    document.getElementById('medicationsCount').textContent = medicationCount;
+                }
+            } catch (error) {
+                console.error('Failed to load health profile:', error);
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const result = await Swal.fire({
+                    title: 'Logout',
+                    text: 'Are you sure you want to logout?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, logout'
+                });
+
+                if (result.isConfirmed) {
+                    // Clear authentication
+                    api.logout();
+                    
+                    // Show success message
+                    await Swal.fire({
+                        title: 'Logged Out',
+                        text: 'You have been successfully logged out',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // Redirect to login
+                    window.location.href = 'login_signup.html';
+                }
+            } catch (error) {
+                console.error('Logout failed:', error);
+                Swal.fire('Error', 'Failed to logout', 'error');
+            }
+        }
+
+        // Update profile function
+        async function updateProfile() {
+            const { value: formValues } = await Swal.fire({
+                title: 'Update Profile',
+                html: `
+                    <div style="text-align: left;">
+                        <label for="firstName" style="display: block; margin-bottom: 5px;">First Name:</label>
+                        <input id="firstName" class="swal2-input" placeholder="First Name" value="${currentUser.profile?.firstName || ''}">
+                        
+                        <label for="lastName" style="display: block; margin-bottom: 5px; margin-top: 15px;">Last Name:</label>
+                        <input id="lastName" class="swal2-input" placeholder="Last Name" value="${currentUser.profile?.lastName || ''}">
+                        
+                        <label for="phone" style="display: block; margin-bottom: 5px; margin-top: 15px;">Phone:</label>
+                        <input id="phone" class="swal2-input" placeholder="Phone Number" value="${currentUser.profile?.phone || ''}">
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                preConfirm: () => {
+                    return {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        phone: document.getElementById('phone').value
+                    }
+                }
+            });
+
+            if (formValues) {
+                try {
+                    if (api.isAuthenticated()) {
+                        await api.updateUserProfile({ profile: formValues });
+                        await loadUserProfile();
+                    } else {
+                        // Update localStorage for demo mode
+                        currentUser.profile = { ...currentUser.profile, ...formValues };
+                        localStorage.setItem('seniocarex_current_user', JSON.stringify(currentUser));
+                        updateUserInfo();
+                    }
+                    
+                    Swal.fire('Success', 'Profile updated successfully', 'success');
+                } catch (error) {
+                    console.error('Profile update failed:', error);
+                    Swal.fire('Error', 'Failed to update profile', 'error');
+                }
+            }
+        }
+
+        // View health profile function
+        async function viewHealthProfile() {
+            const { value: formValues } = await Swal.fire({
+                title: 'Health Profile',
+                html: `
+                    <div style="text-align: left;">
+                        <label for="bloodType" style="display: block; margin-bottom: 5px;">Blood Type:</label>
+                        <select id="bloodType" class="swal2-input">
+                            <option value="">Select Blood Type</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        
+                        <label for="height" style="display: block; margin-bottom: 5px; margin-top: 15px;">Height (cm):</label>
+                        <input id="height" class="swal2-input" type="number" placeholder="Height in cm">
+                        
+                        <label for="weight" style="display: block; margin-bottom: 5px; margin-top: 15px;">Weight (kg):</label>
+                        <input id="weight" class="swal2-input" type="number" placeholder="Weight in kg">
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Update Health Profile',
+                preConfirm: () => {
+                    return {
+                        bloodType: document.getElementById('bloodType').value,
+                        height: document.getElementById('height').value ? parseInt(document.getElementById('height').value) : null,
+                        weight: document.getElementById('weight').value ? parseInt(document.getElementById('weight').value) : null
+                    }
+                }
+            });
+
+            if (formValues) {
+                try {
+                    if (api.isAuthenticated()) {
+                        await api.updateHealthProfile({ healthProfile: formValues });
+                        await loadHealthProfile();
+                    } else {
+                        // Update localStorage for demo mode
+                        if (!currentUser.healthProfile) currentUser.healthProfile = {};
+                        currentUser.healthProfile = { ...currentUser.healthProfile, ...formValues };
+                        localStorage.setItem('seniocarex_current_user', JSON.stringify(currentUser));
+                        
+                        // Update display
+                        document.getElementById('bloodType').textContent = formValues.bloodType || 'Not specified';
+                        document.getElementById('height').textContent = formValues.height ? `${formValues.height} cm` : 'Not specified';
+                        document.getElementById('weight').textContent = formValues.weight ? `${formValues.weight} kg` : 'Not specified';
+                    }
+                    
+                    Swal.fire('Success', 'Health profile updated successfully', 'success');
+                } catch (error) {
+                    console.error('Health profile update failed:', error);
+                    Swal.fire('Error', 'Failed to update health profile', 'error');
+                }
+            }
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+</body>
+</html>

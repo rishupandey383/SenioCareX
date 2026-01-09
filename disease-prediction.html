@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenioCareX | Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f6df5;
+            --secondary: #6c5ce7;
+            --danger: #ff4757;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .header-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            opacity: 0.2;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.8rem;
+        }
+        
+        .symptoms-section {
+            margin-bottom: 30px;
+        }
+        
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .symptom-checkbox {
+            display: none;
+        }
+        
+        .symptom-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .symptom-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .symptom-checkbox:checked + .symptom-label {
+            background-color: #e3f2fd;
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .symptom-label i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .additional-symptoms {
+            margin-top: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 109, 245, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 109, 245, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results-section {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .disease-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .disease-tag {
+            padding: 8px 15px;
+            background-color: #e3f2fd;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .disease-probability {
+            font-size: 0.7rem;
+            display: block;
+            margin-top: 3px;
+            color: var(--gray);
+        }
+        
+        .next-steps {
+            margin-top: 30px;
+        }
+        
+        .step-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .step-1 .step-icon {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+        
+        .step-2 .step-icon {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+        
+        .step-3 .step-icon {
+            background-color: rgba(255, 71, 87, 0.1);
+            color: var(--danger);
+        }
+        
+        .step-content h3 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .step-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .step-content a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        
+        .step-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .refine-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .refine-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .refine-btn.yes {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+        }
+        
+        .refine-btn.no {
+            background-color: transparent;
+            color: var(--gray);
+            border: 2px solid #ddd;
+        }
+        
+        .refine-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .emergency-alert {
+            background-color: rgba(255, 71, 87, 0.1);
+            border-left: 5px solid var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            display: none;
+        }
+        
+        .emergency-alert i {
+            color: var(--danger);
+            font-size: 1.5rem;
+        }
+        
+        .emergency-alert p {
+            font-weight: 500;
+        }
+        
+        .emergency-alert a {
+            color: var(--danger);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: var(--danger);
+            background-color: rgba(255, 71, 87, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .patient-info {
+            margin-bottom: 25px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .symptoms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <i class="fas fa-robot header-icon"></i>
+            <h1>🩺 SenioCareX</h1>
+            <p>AI-powered disease prediction based on your symptoms</p>
+        </header>
+        
+        <div class="content">
+            <div class="symptoms-section">
+                <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Patient Information</h2>
+                
+                <div class="patient-info">
+                    <div class="info-grid">
+                        <div class="input-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" placeholder="Enter your age" min="1" max="120">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="medicalHistory">Medical History (Optional)</label>
+                        <textarea id="medicalHistory" rows="3" placeholder="Any existing medical conditions, allergies, or relevant history"></textarea>
+                    </div>
+                </div>
+                
+                <h2 class="section-title"><i class="fas fa-clipboard-list"></i> What symptoms are you experiencing?</h2>
+                <p>Select all that apply:</p>
+                
+                <div class="symptoms-grid" id="symptomsGrid">
+                    <!-- Common Symptoms -->
+                    <input type="checkbox" id="fever" class="symptom-checkbox">
+                    <label for="fever" class="symptom-label"><i class="fas fa-temperature-high"></i> Fever</label>
+                    
+                    <input type="checkbox" id="headache" class="symptom-checkbox">
+                    <label for="headache" class="symptom-label"><i class="fas fa-head-side-virus"></i> Headache</label>
+                    
+                    <input type="checkbox" id="nausea" class="symptom-checkbox">
+                    <label for="nausea" class="symptom-label"><i class="fas fa-stomach"></i> Nausea</label>
+                    
+                    <input type="checkbox" id="chills" class="symptom-checkbox">
+                    <label for="chills" class="symptom-label"><i class="fas fa-snowflake"></i> Chills</label>
+                    
+                    <input type="checkbox" id="dizziness" class="symptom-checkbox">
+                    <label for="dizziness" class="symptom-label"><i class="fas fa-dizzy"></i> Dizziness</label>
+                    
+                    <input type="checkbox" id="vomiting" class="symptom-checkbox">
+                    <label for="vomiting" class="symptom-label"><i class="fas fa-vomit"></i> Vomiting</label>
+                    
+                    <input type="checkbox" id="fatigue" class="symptom-checkbox">
+                    <label for="fatigue" class="symptom-label"><i class="fas fa-bed"></i> Fatigue</label>
+                    
+                    <input type="checkbox" id="runnyNose" class="symptom-checkbox">
+                    <label for="runnyNose" class="symptom-label"><i class="fas fa-wind"></i> Runny Nose</label>
+                    
+                    <input type="checkbox" id="migraine" class="symptom-checkbox">
+                    <label for="migraine" class="symptom-label"><i class="fas fa-brain"></i> Migraine</label>
+                    
+                    <input type="checkbox" id="soreThroat" class="symptom-checkbox">
+                    <label for="soreThroat" class="symptom-label"><i class="fas fa-teeth-open"></i> Sore Throat</label>
+                    
+                    <input type="checkbox" id="stomachPain" class="symptom-checkbox">
+                    <label for="stomachPain" class="symptom-label"><i class="fas fa-pain"></i> Stomach Pain</label>
+                    
+                    <input type="checkbox" id="bodyAches" class="symptom-checkbox">
+                    <label for="bodyAches" class="symptom-label"><i class="fas fa-bone"></i> Body Aches</label>
+                    
+                    <input type="checkbox" id="diarrhea" class="symptom-checkbox">
+                    <label for="diarrhea" class="symptom-label"><i class="fas fa-toilet"></i> Diarrhea</label>
+                    
+                    <input type="checkbox" id="lossOfAppetite" class="symptom-checkbox">
+                    <label for="lossOfAppetite" class="symptom-label"><i class="fas fa-utensils"></i> Loss of Appetite</label>
+                    
+                    <input type="checkbox" id="skinRash" class="symptom-checkbox">
+                    <label for="skinRash" class="symptom-label"><i class="fas fa-allergies"></i> Skin Rash</label>
+                    
+                    <input type="checkbox" id="muscleWeakness" class="symptom-checkbox">
+                    <label for="muscleWeakness" class="symptom-label"><i class="fas fa-dumbbell"></i> Muscle Weakness</label>
+                </div>
+                
+                <div class="additional-symptoms">
+                    <div class="input-group">
+                        <label for="otherSymptoms"><i class="fas fa-plus-circle"></i> Additional Symptoms (Type Your Own):</label>
+                        <input type="text" id="otherSymptoms" placeholder="Enter other symptoms separated by commas...">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="symptomDuration"><i class="fas fa-clock"></i> Symptom Duration:</label>
+                        <select id="symptomDuration">
+                            <option value="">Select duration</option>
+                            <option value="lessThan24">Less than 24 hours</option>
+                            <option value="1to3days">1-3 days</option>
+                            <option value="4to7days">4-7 days</option>
+                            <option value="1to2weeks">1-2 weeks</option>
+                            <option value="moreThan2weeks">More than 2 weeks</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="symptomSeverity"><i class="fas fa-exclamation-triangle"></i> Symptom Severity:</label>
+                        <select id="symptomSeverity">
+                            <option value="">Select severity</option>
+                            <option value="mild">Mild (doesn't interfere with daily activities)</option>
+                            <option value="moderate">Moderate (some interference with daily activities)</option>
+                            <option value="severe">Severe (unable to perform daily activities)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+                </div>
+                
+                <button id="predictBtn" class="btn btn-block"><i class="fas fa-search"></i> Analyze Symptoms with AI</button>
+            </div>
+            
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <p>Our AI is analyzing your symptoms. This may take a moment...</p>
+            </div>
+            
+            <div class="results-section" id="resultsSection">
+                <div class="emergency-alert" id="emergencyAlert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Emergency Alert:</strong> Based on your symptoms, you might be experiencing a serious condition. Please <a href="#" id="emergencyLink">seek immediate medical attention</a> or call emergency services.</p>
+                </div>
+                
+                <div class="results-card">
+                    <h2 class="section-title"><i class="fas fa-diagnoses"></i> AI-Powered Diagnosis</h2>
+                    <p>Based on your symptoms and our AI analysis, possible conditions may include:</p>
+                    
+                    <div class="disease-list" id="diseaseList">
+                        <!-- Diseases will be populated here by JavaScript -->
+                    </div>
+                    
+                    <div id="aiInsights" class="ai-insights">
+                        <!-- AI insights will be added here -->
+                    </div>
+                    
+                    <p class="disclaimer"><small><i class="fas fa-info-circle"></i> Note: This is not a diagnosis. The results are based on statistical probabilities and should not replace professional medical advice.</small></p>
+                </div>
+                
+                <div class="next-steps">
+                    <h2 class="section-title"><i class="fas fa-ambulance"></i> Recommended Next Steps</h2>
+                    
+                    <div class="step-card step-1">
+                        <div class="step-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Consult a Doctor</h3>
+                            <p>Schedule an appointment with a healthcare professional for proper diagnosis and treatment.</p>
+                            <a href="#" id="consultDoctorLink">Book Online Consultation Now</a>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card step-2">
+                        <div class="step-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Home Remedies & Precautions</h3>
+                            <p id="homeRemediesText">Based on your symptoms, we recommend rest, hydration, and over-the-counter pain relief if needed.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card step-3" id="emergencyStep" style="display: none;">
+                        <div class="step-icon">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3>Emergency Care Needed</h3>
+                            <p>Your symptoms suggest a potentially serious condition that requires immediate medical attention.</p>
+                            <a href="#" id="emergencyHelpLink">Find Nearest Emergency Services</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="refine-options">
+                    <button class="refine-btn yes" id="refineYes"><i class="fas fa-redo"></i> Refine Symptoms</button>
+                    <button class="refine-btn no" id="refineNo"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // This would normally be an external API call
+        class DiseasePredictionAPI {
+            static async predictDisease(symptomData) {
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // In a real application, this would be a fetch() call to your backend
+                // Example:
+                // const response = await fetch('https://your-api.com/predict', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(symptomData)
+                // });
+                // return await response.json();
+                
+                // Mock response - in reality this would come from your AI model
+                return this.mockAIPrediction(symptomData);
+            }
+            
+            static mockAIPrediction(symptomData) {
+                // This is a simplified mock - a real AI would be much more sophisticated
+                const possibleDiseases = [
+                    { name: "Viral Fever", probability: 0.85, severity: "moderate", confidence: 0.78 },
+                    { name: "Influenza (Flu)", probability: 0.72, severity: "moderate", confidence: 0.65 },
+                    { name: "Common Cold", probability: 0.68, severity: "low", confidence: 0.60 },
+                    { name: "Stomach Infection", probability: 0.45, severity: "moderate", confidence: 0.55 },
+                    { name: "COVID-19", probability: 0.38, severity: "high", confidence: 0.50 },
+                    { name: "Dengue", probability: 0.25, severity: "high", confidence: 0.45 },
+                    { name: "Food Poisoning", probability: 0.20, severity: "moderate", confidence: 0.40 }
+                ];
+                
+                // Filter based on symptoms
+                const selectedSymptoms = symptomData.symptoms;
+                const filteredDiseases = possibleDiseases.filter(disease => {
+                    // In a real system, this would be based on actual symptom-disease relationships
+                    if (selectedSymptoms.includes("fever") && selectedSymptoms.includes("headache")) {
+                        return disease.name === "Viral Fever" || disease.name === "Influenza (Flu)" || 
+                               disease.name === "COVID-19" || disease.name === "Dengue";
+                    }
+                    if (selectedSymptoms.includes("nausea") && selectedSymptoms.includes("vomiting")) {
+                        return disease.name === "Stomach Infection" || disease.name === "Food Poisoning";
+                    }
+                    if (selectedSymptoms.includes("runnyNose") && selectedSymptoms.includes("soreThroat")) {
+                        return disease.name === "Common Cold";
+                    }
+                    return true;
+                });
+                
+                // Adjust probabilities based on additional factors
+                filteredDiseases.forEach(disease => {
+                    // Age factor
+                    if (symptomData.age > 60 && disease.severity === "high") {
+                        disease.probability *= 1.2;
+                    }
+                    
+                    // Duration factor
+                    if (symptomData.duration === "moreThan2weeks") {
+                        disease.probability *= 1.3;
+                    }
+                    
+                    // Severity factor
+                    if (symptomData.severity === "severe") {
+                        disease.probability *= 1.4;
+                    }
+                    
+                    // Cap at 95% for realism
+                    disease.probability = Math.min(0.95, disease.probability);
+                    
+                    // Format for display
+                    disease.probabilityDisplay = Math.round(disease.probability * 100) + '%';
+                });
+                
+                // Sort by probability
+                filteredDiseases.sort((a, b) => b.probability - a.probability);
+                
+                // Limit to top 5 results
+                const topResults = filteredDiseases.slice(0, 5);
+                
+                // Generate AI insights
+                const insights = this.generateAIInsights(symptomData, topResults);
+                
+                return {
+                    success: true,
+                    diseases: topResults,
+                    insights: insights,
+                    emergency: topResults.some(d => d.severity === "high" && d.probability > 0.3)
+                };
+            }
+            
+            static generateAIInsights(symptomData, diseases) {
+                const insights = [];
+                
+                // Fever insights
+                if (symptomData.symptoms.includes("fever")) {
+                    if (symptomData.duration === "lessThan24") {
+                        insights.push("Your recent onset of fever suggests an acute infection. Monitor your temperature closely.");
+                    } else if (symptomData.duration === "moreThan2weeks") {
+                        insights.push("A fever lasting more than two weeks requires medical evaluation to rule out chronic conditions.");
+                    }
+                }
+                
+                // Pain insights
+                if (symptomData.symptoms.includes("headache") || symptomData.symptoms.includes("bodyAches")) {
+                    insights.push("The presence of pain symptoms suggests your body is fighting an infection or inflammatory process.");
+                }
+                
+                // Gastrointestinal insights
+                if (symptomData.symptoms.some(s => ["nausea", "vomiting", "diarrhea", "stomachPain"].includes(s))) {
+                    insights.push("Gastrointestinal symptoms could indicate foodborne illness, viral infection, or other digestive issues.");
+                }
+                
+                // Top disease insights
+                if (diseases.length > 0) {
+                    const topDisease = diseases[0];
+                    insights.push(`Our AI detected a ${topDisease.probabilityDisplay} probability of ${topDisease.name}. ${this.getDiseaseSpecificAdvice(topDisease.name)}`);
+                }
+                
+                return insights;
+            }
+            
+            static getDiseaseSpecificAdvice(diseaseName) {
+                const advice = {
+                    "Viral Fever": "Viral infections typically resolve on their own with rest and hydration. Monitor for worsening symptoms.",
+                    "Influenza (Flu)": "Influenza can be serious in high-risk individuals. Antiviral medications may help if started early.",
+                    "Common Cold": "Symptomatic treatment is usually sufficient. The cold typically resolves within 7-10 days.",
+                    "Stomach Infection": "Stay hydrated and follow a bland diet. Seek medical attention if symptoms worsen or persist.",
+                    "COVID-19": "Consider getting tested for COVID-19. Isolate yourself and monitor for breathing difficulties.",
+                    "Dengue": "Dengue can become serious quickly. Seek medical attention immediately if you develop bleeding or severe pain.",
+                    "Food Poisoning": "Foodborne illnesses usually resolve within 24-48 hours. Seek help if symptoms are severe or persistent."
+                };
+                
+                return advice[diseaseName] || "Follow general symptom management and consult a doctor if symptoms persist or worsen.";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const predictBtn = document.getElementById('predictBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            const diseaseList = document.getElementById('diseaseList');
+            const refineYesBtn = document.getElementById('refineYes');
+            const refineNoBtn = document.getElementById('refineNo');
+            const emergencyAlert = document.getElementById('emergencyAlert');
+            const emergencyStep = document.getElementById('emergencyStep');
+            const homeRemediesText = document.getElementById('homeRemediesText');
+            const loadingContainer = document.getElementById('loadingContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const aiInsights = document.getElementById('aiInsights');
+            const consultDoctorLink = document.getElementById('consultDoctorLink');
+            const emergencyLink = document.getElementById('emergencyLink');
+            const emergencyHelpLink = document.getElementById('emergencyHelpLink');
+
+            // Set up links (in a real app, these would go to actual services)
+            consultDoctorLink.href = "#";
+            emergencyLink.href = "#";
+            emergencyHelpLink.href = "#";
+
+            predictBtn.addEventListener('click', predictDiseases);
+            refineYesBtn.addEventListener('click', resetForm);
+            refineNoBtn.addEventListener('click', closeResults);
+
+            async function predictDiseases() {
+                // Validate inputs
+                const age = document.getElementById('age').value;
+                const gender = document.getElementById('gender').value;
+                const symptomDuration = document.getElementById('symptomDuration').value;
+                
+                if (!age || !gender || !symptomDuration) {
+                    showError("Please fill in all required fields: age, gender, and symptom duration.");
+                    return;
+                }
+                
+                // Get selected symptoms
+                const selectedSymptoms = [];
+                document.querySelectorAll('.symptom-checkbox:checked').forEach(checkbox => {
+                    selectedSymptoms.push(checkbox.id);
+                });
+                
+                // Get additional symptoms from text input
+                const otherSymptomsInput = document.getElementById('otherSymptoms').value.trim();
+                if (otherSymptomsInput) {
+                    const additionalSymptoms = otherSymptomsInput.split(',').map(s => s.trim().toLowerCase().replace(/\s+/g, ''));
+                    selectedSymptoms.push(...additionalSymptoms);
+                }
+                
+                if (selectedSymptoms.length === 0) {
+                    showError("Please select at least one symptom.");
+                    return;
+                }
+                
+                // Get symptom severity
+                const symptomSeverity = document.getElementById('symptomSeverity').value;
+                
+                // Get medical history
+                const medicalHistory = document.getElementById('medicalHistory').value;
+                
+                // Prepare data for API
+                const symptomData = {
+                    age: parseInt(age),
+                    gender,
+                    symptoms: selectedSymptoms,
+                    duration: symptomDuration,
+                    severity: symptomSeverity,
+                    medicalHistory,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Show loading state
+                predictBtn.disabled = true;
+                loadingContainer.style.display = 'block';
+                hideError();
+                
+                try {
+                    // Call the API (mock in this case)
+                    const response = await DiseasePredictionAPI.predictDisease(symptomData);
+                    
+                    if (response.success) {
+                        // Display results
+                        displayResults(response.diseases, selectedSymptoms, response.insights);
+                        
+                        // Show emergency alert if needed
+                        if (response.emergency) {
+                            emergencyAlert.style.display = 'flex';
+                            emergencyStep.style.display = 'flex';
+                        }
+                        
+                        // Show results section
+                        resultsSection.style.display = 'block';
+                        
+                        // Scroll to results
+                        resultsSection.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        showError("We couldn't analyze your symptoms. Please try again later.");
+                    }
+                } catch (error) {
+                    console.error("API Error:", error);
+                    showError("There was an error processing your request. Please try again.");
+                } finally {
+                    // Hide loading state
+                    predictBtn.disabled = false;
+                    loadingContainer.style.display = 'none';
+                }
+            }
+            
+            function displayResults(diseases, selectedSymptoms, insights) {
+                // Clear previous results
+                diseaseList.innerHTML = '';
+                aiInsights.innerHTML = '';
+                emergencyAlert.style.display = 'none';
+                emergencyStep.style.display = 'none';
+                
+                if (diseases.length === 0) {
+                    diseaseList.innerHTML = '<p>No specific conditions matched your symptoms. Please consult a doctor for unusual or persistent symptoms.</p>';
+                    return;
+                }
+                
+                // Display matched diseases
+                diseases.forEach(disease => {
+                    const diseaseTag = document.createElement('div');
+                    diseaseTag.className = 'disease-tag';
+                    diseaseTag.innerHTML = `
+                        ${disease.name}
+                        <span class="disease-probability">Probability: ${disease.probabilityDisplay}</span>
+                    `;
+                    diseaseList.appendChild(diseaseTag);
+                });
+                
+                // Display AI insights
+                if (insights && insights.length > 0) {
+                    const insightsTitle = document.createElement('h3');
+                    insightsTitle.className = 'section-title';
+                    insightsTitle.innerHTML = '<i class="fas fa-lightbulb"></i> AI Insights';
+                    aiInsights.appendChild(insightsTitle);
+                    
+                    const insightsList = document.createElement('ul');
+                    insightsList.style.marginTop = '15px';
+                    insightsList.style.paddingLeft = '20px';
+                    insightsList.style.color = 'var(--gray)';
+                    
+                    insights.forEach(insight => {
+                        const item = document.createElement('li');
+                        item.style.marginBottom = '10px';
+                        item.textContent = insight;
+                        insightsList.appendChild(item);
+                    });
+                    
+                    aiInsights.appendChild(insightsList);
+                }
+                
+                // Generate home remedies based on symptoms
+                const remedies = [];
+                selectedSymptoms.forEach(symptom => {
+                    // In a real app, this would come from a more comprehensive database
+                    switch(symptom) {
+                        case "fever":
+                            remedies.push("Rest and drink plenty of fluids. Use a damp cloth to cool your forehead.");
+                            break;
+                        case "headache":
+                            remedies.push("Apply a cold compress to your forehead. Rest in a quiet, dark room.");
+                            break;
+                        case "nausea":
+                            remedies.push("Sip ginger tea or chew ginger. Avoid strong smells and eat small, bland meals.");
+                            break;
+                        case "diarrhea":
+                            remedies.push("Stay hydrated with oral rehydration solutions. Eat bananas, rice, applesauce, and toast (BRAT diet).");
+                            break;
+                        case "soreThroat":
+                            remedies.push("Gargle with warm salt water. Drink warm liquids like tea with honey.");
+                            break;
+                    }
+                });
+                
+                // Add general advice if no specific remedies
+                if (remedies.length === 0) {
+                    remedies.push("Get plenty of rest and stay hydrated. Monitor your symptoms and seek medical advice if they worsen.");
+                }
+                
+                homeRemediesText.textContent = remedies.join(' ');
+            }
+            
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+            
+            function resetForm() {
+                // Hide results
+                resultsSection.style.display = 'none';
+                loadingContainer.style.display = 'none';
+                
+                // Scroll back to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            function closeResults() {
+                // Hide results without resetting the form
+                resultsSection.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

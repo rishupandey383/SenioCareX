@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assessments | SenioCareX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --accent-color: #e74c3c;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        h1 i {
+            margin-right: 10px;
+            color: var(--light-color);
+        }
+        
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        nav a:hover {
+            color: var(--light-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--light-color);
+            transition: var(--transition);
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .assessment-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .assessment-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .assessment-hero h2 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .assessment-hero p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .assessment-form-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: var(--box-shadow);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .assessment-form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        button[type="submit"] {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+        
+        .form-icon {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--primary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .assessment-benefits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 3rem 0;
+        }
+        
+        .benefit-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 250px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .benefit-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .benefit-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stress-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+            
+            .assessment-hero h2 {
+                font-size: 2rem;
+            }
+            
+            .assessment-form-container {
+                padding: 1.5rem;
+            }
+            
+            .benefit-card {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .assessment-hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .form-group input,
+            .form-group select {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1><i class="fas fa-heartbeat"></i>SenioCareX Portal</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="assessments.html" class="active">Health Assessments</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="products.html">Products</a>
+                <a href="community.html">Community Support</a>
+                <a href="consultation.html">Consultation</a>
+                <a href="logout.html">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="assessment-container">
+        <section class="assessment-hero">
+            <h2>Personalized Health Assessment</h2>
+            <p>Take a few minutes to complete our comprehensive health assessment and receive personalized recommendations to improve your wellbeing.</p>
+        </section>
+
+        <section class="assessment-benefits">
+            <div class="benefit-card">
+                <i class="fas fa-user-md"></i>
+                <h3>Expert Evaluation</h3>
+                <p>Our assessment is designed by healthcare professionals to give you accurate insights.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Track Progress</h3>
+                <p>Monitor your health improvements over time with our tracking system.</p>
+            </div>
+            <div class="benefit-card">
+                <i class="fas fa-lightbulb"></i>
+                <h3>Personalized Tips</h3>
+                <p>Receive customized recommendations based on your unique profile.</p>
+            </div>
+        </section>
+
+        <section class="assessment-form-container">
+            <form id="healthAssessment">
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required min="18" max="120">
+                    <i class="fas fa-birthday-cake form-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                    <i class="fas fa-venus-mars form-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exercise">How often do you exercise?</label>
+                    <select id="exercise" name="exercise" required>
+                        <option value="">Select Frequency</option>
+                        <option value="never">Never</option>
+                        <option value="1-2 times a week">1-2 times a week</option>
+                        <option value="3-4 times a week">3-4 times a week</option>
+                        <option value="5 or more times a week">5 or more times a week</option>
+                    </select>
+                    <i class="fas fa-running form-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diet">How would you describe your diet?</label>
+                    <select id="diet" name="diet" required>
+                        <option value="">Select Diet Quality</option>
+                        <option value="unhealthy">Unhealthy (mostly processed foods)</option>
+                        <option value="average">Average (mix of healthy and unhealthy)</option>
+                        <option value="healthy">Healthy (mostly whole, unprocessed foods)</option>
+                    </select>
+                    <i class="fas fa-utensils form-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="smoking">Do you smoke?</label>
+                    <select id="smoking" name="smoking" required>
+                        <option value="">Select Option</option>
+                        <option value="yes">Yes, regularly</option>
+                        <option value="occasionally">Occasionally</option>
+                        <option value="former">Former smoker</option>
+                        <option value="no">No, never</option>
+                    </select>
+                    <i class="fas fa-smoking-ban form-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stress">On a scale of 1-10, how stressed do you feel?</label>
+                    <input type="range" id="stress" name="stress" min="1" max="10" value="5" required>
+                    <div class="stress-scale">
+                        <span>1 (Low)</span>
+                        <span>5 (Moderate)</span>
+                        <span>10 (High)</span>
+                    </div>
+                    <i class="fas fa-brain form-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sleep">How many hours do you typically sleep per night?</label>
+                    <input type="number" id="sleep" name="sleep" min="2" max="12" step="0.5" required>
+                    <i class="fas fa-bed form-icon"></i>
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-clipboard-check"></i> Get Your Health Report
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <p>© 2024 SenioCareX Portal | All Rights Reserved</p>
+            <p>Helping you live your healthiest life</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple form submission handler
+        document.getElementById('healthAssessment').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real application, you would send the data to a server here
+            // For demonstration, we'll just show an alert
+            alert('Thank you for completing your health assessment! Your personalized report is being generated.');
+            
+            // Reset form
+            this.reset();
+            
+            // Scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Dynamic stress value display
+        const stressInput = document.getElementById('stress');
+        const stressValueDisplay = document.createElement('div');
+        stressValueDisplay.style.marginTop = '10px';
+        stressValueDisplay.style.fontWeight = 'bold';
+        stressValueDisplay.style.color = 'var(--primary-color)';
+        stressValueDisplay.textContent = `Current stress level: ${stressInput.value}`;
+        stressInput.insertAdjacentElement('afterend', stressValueDisplay);
+        
+        stressInput.addEventListener('input', function() {
+            stressValueDisplay.textContent = `Current stress level: ${this.value}`;
+            
+            // Change color based on stress level
+            if (this.value >= 8) {
+                stressValueDisplay.style.color = 'var(--accent-color)';
+            } else if (this.value >= 5) {
+                stressValueDisplay.style.color = '#f39c12';
+            } else {
+                stressValueDisplay.style.color = 'var(--secondary-color)';
+            }
+        });
+    </script>
+</body>
+</html>

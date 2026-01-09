@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Blogs | SenioCareX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --accent-color: #e74c3c;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 100;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        h1 i {
+            margin-right: 10px;
+            color: var(--light-color);
+        }
+        
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        nav a:hover {
+            color: var(--light-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--light-color);
+            transition: var(--transition);
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .blogs-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .blogs-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s;
+        }
+        
+        .blogs-hero h2 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .blogs-hero p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            animation: fadeInUp 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .blog-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .blog-card:hover .blog-image img {
+            transform: scale(1.1);
+        }
+        
+        .blog-content {
+            padding: 1.5rem;
+        }
+        
+        .blog-content h3 {
+            font-size: 1.4rem;
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+            transition: var(--transition);
+        }
+        
+        .blog-card:hover .blog-content h3 {
+            color: var(--primary-color);
+        }
+        
+        .blog-content p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .read-more {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .read-more:hover {
+            background: white;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .search-filter {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 1s;
+        }
+        
+        .search-group {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-group input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+        
+        .search-group button {
+            padding: 0 1.5rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-group button:hover {
+            transform: scale(1.05);
+        }
+        
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 0.3rem 0.8rem;
+            background-color: #eee;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Animation delays for blog cards */
+        .blog-card:nth-child(1) { animation-delay: 0.1s; }
+        .blog-card:nth-child(2) { animation-delay: 0.2s; }
+        .blog-card:nth-child(3) { animation-delay: 0.3s; }
+        .blog-card:nth-child(4) { animation-delay: 0.4s; }
+        .blog-card:nth-child(5) { animation-delay: 0.5s; }
+        .blog-card:nth-child(6) { animation-delay: 0.6s; }
+        .blog-card:nth-child(7) { animation-delay: 0.7s; }
+        .blog-card:nth-child(8) { animation-delay: 0.8s; }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+            
+            .blogs-hero h2 {
+                font-size: 2rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-group {
+                flex-direction: column;
+            }
+            
+            .search-group button {
+                padding: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .blogs-hero h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1><i class="fas fa-heartbeat"></i>SenioCareX Portal</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="assessments.html">Health Assessments</a>
+                <a href="blogs.html" class="active">Blogs</a>
+                <a href="products.html">Products</a>
+                <a href="community.html">Community Support</a>
+                <a href="consultation.html">Consultation</a>
+                <a href="logout.html">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="blogs-container">
+        <section class="blogs-hero">
+            <h2>Health & Wellness Blog</h2>
+            <p>Discover expert advice, tips, and insights to help you maintain a healthy lifestyle at any age.</p>
+        </section>
+
+        <section class="search-filter">
+            <div class="search-group">
+                <input type="text" placeholder="Search blog articles...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="categories">
+                <button class="category-btn active">All</button>
+                <button class="category-btn">Nutrition</button>
+                <button class="category-btn">Exercise</button>
+                <button class="category-btn">Mental Health</button>
+                <button class="category-btn">Chronic Conditions</button>
+                <button class="category-btn">Prevention</button>
+            </div>
+        </section>
+
+        <section class="blog-grid">
+            <article class="blog-card">
+                <div class="category-tag">Nutrition</div>
+                <div class="blog-image">
+                    <img src="Blog/Understanding.jpg" alt="Understanding Elderly Nutrition">
+                </div>
+                <div class="blog-content">
+                    <h3>Understanding Elderly Nutrition</h3>
+                    <p>Learn how balanced diets can significantly improve quality of life for seniors and help manage age-related health conditions.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 5 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> June 15, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Health</div>
+                <div class="blog-image">
+                    <img src="Blog/chronic.jpg" alt="Managing Chronic Pain">
+                </div>
+                <div class="blog-content">
+                    <h3>Managing Chronic Pain in Seniors</h3>
+                    <p>Effective strategies and treatments to help elderly individuals cope with persistent pain and improve daily comfort.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 7 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> May 28, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Fitness</div>
+                <div class="blog-image">
+                    <img src="Blog/exercise.jpg" alt="Senior Exercise Guide">
+                </div>
+                <div class="blog-content">
+                    <h3>Safe Exercises for Seniors</h3>
+                    <p>A comprehensive guide to low-impact exercises that improve strength, flexibility, and cardiovascular health for older adults.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 8 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> May 15, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Wellness</div>
+                <div class="blog-image">
+                    <img src="Blog/mental.jpg" alt="Mental Health Awareness">
+                </div>
+                <div class="blog-content">
+                    <h3>Mental Health in Golden Years</h3>
+                    <p>Recognizing and addressing common mental health challenges faced by elderly individuals and maintaining emotional wellbeing.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 6 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> April 30, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Aging</div>
+                <div class="blog-image">
+                    <img src="Blog/healthy aging.jpg" alt="Healthy Aging">
+                </div>
+                <div class="blog-content">
+                    <h3>Secrets to Healthy Aging</h3>
+                    <p>Science-backed habits and lifestyle choices that can help you age gracefully and maintain vitality in your later years.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 10 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> April 22, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Social</div>
+                <div class="blog-image">
+                    <img src="Blog/Socially Active.jpg" alt="Social Activity">
+                </div>
+                <div class="blog-content">
+                    <h3>The Power of Social Connection</h3>
+                    <p>How maintaining an active social life contributes to longevity, cognitive health, and overall happiness in seniors.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 4 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> April 10, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Safety</div>
+                <div class="blog-image">
+                    <img src="Blog/fall.jpg" alt="Fall Prevention">
+                </div>
+                <div class="blog-content">
+                    <h3>Fall Prevention Strategies</h3>
+                    <p>Practical tips to reduce fall risks at home and exercises to improve balance and coordination for elderly individuals.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 9 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> March 28, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="category-tag">Medication</div>
+                <div class="blog-image">
+                    <img src="Blog/medications.jpg" alt="Medication Management">
+                </div>
+                <div class="blog-content">
+                    <h3>Medication Management for Seniors</h3>
+                    <p>A guide to safely managing multiple medications, understanding interactions, and maintaining proper schedules.</p>
+                    <div class="blog-meta">
+                        <span><i class="far fa-clock"></i> 7 min read</span>
+                        <span><i class="far fa-calendar-alt"></i> March 15, 2024</span>
+                    </div>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <p>© 2024 SenioCareX Portal | All Rights Reserved</p>
+            <p>Helping you live your healthiest life at every age</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple search functionality
+        document.querySelector('.search-group button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-group input').value.toLowerCase();
+            const blogCards = document.querySelectorAll('.blog-card');
+            
+            blogCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const content = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.classList.add('animate__animated', 'animate__fadeIn');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        // Category filtering
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.textContent;
+                const blogCards = document.querySelectorAll('.blog-card');
+                
+                blogCards.forEach(card => {
+                    const cardCategory = card.querySelector('.category-tag').textContent;
+                    
+                    if (category === 'All' || cardCategory === category) {
+                        card.style.display = 'block';
+                        card.classList.add('animate__animated', 'animate__fadeIn');
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Animation on scroll
+        const animateOnScroll = function() {
+            const blogCards = document.querySelectorAll('.blog-card');
+            
+            blogCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    card.style.animation = `fadeInUp 0.5s ${index * 0.1}s forwards`;
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        // Initial trigger
+        animateOnScroll();
+    </script>
+</body>
+</html>
